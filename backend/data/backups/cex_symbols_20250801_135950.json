@@ -1,0 +1,20 @@
+{
+  "symbols": [
+    {
+      "id": "220e4001-ef49-455b-b303-f48cfe170b4b",
+      "ticker_name": "UIUIUQ",
+      "exchange_name": "bybit",
+      "created_at": "2025-08-01T12:43:31.700701",
+      "updated_at": "2025-08-01T12:43:31.700738"
+    },
+    {
+      "id": "fdb31af5-0deb-41b3-b2cb-a894fc75615a",
+      "ticker_name": "ETHW",
+      "exchange_name": "bitunix",
+      "created_at": "2025-08-01T09:15:38.781379",
+      "updated_at": "2025-08-01T09:15:38.781393"
+    }
+  ],
+  "last_updated": "2025-08-01T13:59:48.038910",
+  "version": 21
+}

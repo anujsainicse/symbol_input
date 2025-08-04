@@ -1,0 +1,9 @@
+ETH:binance
+DOGE:kraken
+ASDF:binance
+ETH:234
+ASF:234
+YYUTU:gate
+ASDF:gate
+UIUIUQ:bybit
+ETHW:bitunix

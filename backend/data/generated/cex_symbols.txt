@@ -1,0 +1,3 @@
+BTC:binance
+ETH:coinbase
+DOGE:kraken

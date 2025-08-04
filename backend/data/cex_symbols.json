@@ -1,0 +1,30 @@
+{
+  "symbols": [
+    {
+      "id": "89f2d721-be16-468e-b310-2ad6bc083f9d",
+      "ticker_name": "COTIUSDT",
+      "exchange_name": "binance",
+      "symbol": "COTi",
+      "created_at": "2025-08-01T14:00:11.398296",
+      "updated_at": "2025-08-01T14:37:36.012598"
+    },
+    {
+      "id": "6ab34cde-214a-496c-a79b-40159cc6d159",
+      "ticker_name": "COTIUSDT",
+      "exchange_name": "kucoin",
+      "symbol": "COTI",
+      "created_at": "2025-08-01T14:00:23.145001",
+      "updated_at": "2025-08-01T14:37:49.579171"
+    },
+    {
+      "id": "6d53694a-135a-424c-8580-09b2fe052ab3",
+      "ticker_name": "LUMAUSDT",
+      "exchange_name": "htx",
+      "symbol": "lumj",
+      "created_at": "2025-08-02T10:26:35.833834",
+      "updated_at": "2025-08-02T10:26:47.261211"
+    }
+  ],
+  "last_updated": "2025-08-02T10:26:47.265765",
+  "version": 29
+}

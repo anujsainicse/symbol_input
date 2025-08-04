@@ -1,0 +1,50 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crypto-symbols-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist data directory
+      - backend_data:/app/data
+      # Optional: mount for development
+      # - ./backend:/app
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=production
+    networks:
+      - crypto-network
+    # Health check removed for simplicity
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: crypto-symbols-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    # API URL will use default from code (http://localhost:8000)
+    # environment:
+    #   - REACT_APP_API_URL=http://localhost:8000
+    networks:
+      - crypto-network
+    # Health check removed for simplicity
+
+volumes:
+  backend_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend/data
+
+networks:
+  crypto-network:
+    driver: bridge
+    name: crypto-symbols-network

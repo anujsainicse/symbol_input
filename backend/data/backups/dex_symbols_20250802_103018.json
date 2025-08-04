@@ -1,0 +1,15 @@
+{
+  "symbols": [
+    {
+      "id": "95145d31-d69f-48d9-9133-90ca45e7f525",
+      "dex_type": "uniswap_v2",
+      "pool_address": "0xA2b04F8133fC25887A436812eaE384e32A8A84F2",
+      "pool_name": "Coti",
+      "altcoin_quantity": 10000,
+      "created_at": "2025-08-01T13:59:16.268153",
+      "updated_at": "2025-08-01T13:59:16.268165"
+    }
+  ],
+  "last_updated": "2025-08-01T13:59:23.335071",
+  "version": 21
+}
