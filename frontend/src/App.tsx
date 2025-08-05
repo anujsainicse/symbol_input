@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Landing from './pages/Landing';
 import DEXManagement from './pages/DEXManagement';
 import CEXManagement from './pages/CEXManagement';
+import FuturesManagement from './pages/FuturesManagement';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/dex" element={<DEXManagement />} />
             <Route path="/cex" element={<CEXManagement />} />
+            <Route path="/futures" element={<FuturesManagement />} />
           </Routes>
         </div>
       </Router>

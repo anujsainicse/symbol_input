@@ -1,0 +1,14 @@
+{
+  "symbols": [
+    {
+      "id": "796429d0-4492-4b67-b599-a7e94b9ab4da",
+      "symbol": "COTI",
+      "ticker": "COTIUSDT",
+      "exchange": "binance",
+      "created_at": "2025-08-05T18:21:32.064747",
+      "updated_at": "2025-08-05T18:21:32.064753"
+    }
+  ],
+  "last_updated": "2025-08-05T18:21:32.065023",
+  "version": 4
+}

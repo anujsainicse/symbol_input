@@ -71,11 +71,50 @@ class CEXData(BaseModel):
     last_updated: str
     version: int
 
+class FuturesSymbol(BaseModel):
+    id: str
+    symbol: str
+    ticker: str
+    exchange: str
+    created_at: str
+    updated_at: str
+    
+    @validator('symbol')
+    def validate_symbol(cls, v):
+        v_upper = v.upper()
+        if not re.match(r'^[A-Z]{2,10}$', v_upper):
+            raise ValueError('symbol must be 2-10 characters')
+        return v_upper
+    
+    @validator('ticker')
+    def validate_ticker(cls, v):
+        return v.upper()
+    
+    @validator('exchange')
+    def validate_exchange(cls, v):
+        allowed_exchanges = ['binance', 'bybit', 'okx', 'bitget', 'bitmex', 'deribit', 'kraken', 'huobi', 'gate', 'kucoin']
+        if v.lower() not in allowed_exchanges:
+            raise ValueError(f'exchange must be one of {allowed_exchanges}')
+        return v.lower()
+
+class FuturesSymbolRequest(BaseModel):
+    symbol: str
+    ticker: str
+    exchange: str
+
+class FuturesData(BaseModel):
+    symbols: List[FuturesSymbol]
+    last_updated: str
+    version: int
+
 class FileStatus(BaseModel):
     dex_symbols_count: int
     cex_symbols_count: int
+    futures_symbols_count: int
     dex_file_size: int
     cex_file_size: int
+    futures_file_size: int
     last_updated: str
     pooladdress_file_exists: bool
     cex_symbols_file_exists: bool
+    futures_symbols_file_exists: bool

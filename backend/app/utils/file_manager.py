@@ -6,18 +6,20 @@ from typing import List
 from pathlib import Path
 import uuid
 
-from app.models.symbols import DEXSymbol, CEXSymbol, DEXData, CEXData
+from app.models.symbols import DEXSymbol, CEXSymbol, FuturesSymbol, DEXData, CEXData, FuturesData
 
 class FileManager:
     def __init__(self, data_dir: str = "data"):
         self.data_dir = Path(data_dir)
         self.dex_file = self.data_dir / "dex_symbols.json"
         self.cex_file = self.data_dir / "cex_symbols.json"
+        self.futures_file = self.data_dir / "futures_symbols.json"
         self.generated_dir = self.data_dir / "generated"
         self.backups_dir = self.data_dir / "backups"
         # Save txt files to current directory instead of generated folder
         self.pooladdress_file = Path("pooladdress.txt")
         self.cex_symbols_file = Path("cex_symbols.txt")
+        self.futures_symbols_file = Path("futures_symbols.txt")
         
         self.initialize_directories()
     
@@ -34,12 +36,22 @@ class FileManager:
         if not self.cex_file.exists():
             self.write_cex_data(CEXData(symbols=[], last_updated=datetime.now().isoformat(), version=1))
         
+        if not self.futures_file.exists():
+            self.write_futures_data(FuturesData(symbols=[], last_updated=datetime.now().isoformat(), version=1))
+        
         # Generate txt files from existing JSON data on startup
         self.sync_txt_files()
     
-    def create_backup(self, file_path: Path):
-        """Create a backup of the specified file"""
-        if file_path.exists():
+    def create_backup(self, file_type: str):
+        """Create a backup of the specified file type"""
+        file_map = {
+            'dex': self.dex_file,
+            'cex': self.cex_file,
+            'futures': self.futures_file
+        }
+        
+        file_path = file_map.get(file_type)
+        if file_path and file_path.exists():
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_name = f"{file_path.stem}_{timestamp}.json"
             backup_path = self.backups_dir / backup_name
@@ -62,7 +74,7 @@ class FileManager:
     
     def write_dex_data(self, data: DEXData):
         """Write DEX symbols to JSON file and generate txt file"""
-        self.create_backup(self.dex_file)
+        self.create_backup('dex')
         
         data.last_updated = datetime.now().isoformat()
         data.version += 1
@@ -88,7 +100,7 @@ class FileManager:
     
     def write_cex_data(self, data: CEXData):
         """Write CEX symbols to JSON file and generate txt file"""
-        self.create_backup(self.cex_file)
+        self.create_backup('cex')
         
         data.last_updated = datetime.now().isoformat()
         data.version += 1
@@ -135,12 +147,45 @@ class FileManager:
         except FileNotFoundError:
             return 0
     
+    def read_futures_data(self) -> FuturesData:
+        """Read futures symbols from JSON file"""
+        try:
+            with open(self.futures_file, 'r') as f:
+                data = json.load(f)
+                return FuturesData(**data)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return FuturesData(symbols=[], last_updated=datetime.now().isoformat(), version=1)
+    
+    def write_futures_data(self, data: FuturesData):
+        """Write futures symbols to JSON file and generate txt file"""
+        self.create_backup('futures')
+        
+        data.last_updated = datetime.now().isoformat()
+        data.version += 1
+        
+        with open(self.futures_file, 'w') as f:
+            json.dump(data.dict(), f, indent=2)
+        
+        self.generate_futures_file(data.symbols)
+    
+    def generate_futures_file(self, symbols: List[FuturesSymbol]):
+        """Generate futures_symbols.txt file"""
+        lines = []
+        for symbol in symbols:
+            line = f"{symbol.symbol}:{symbol.ticker}:{symbol.exchange}"
+            lines.append(line)
+        
+        with open(self.futures_symbols_file, 'w') as f:
+            f.write('\n'.join(lines))
+    
     def sync_txt_files(self):
         """Generate txt files from current JSON data"""
         dex_data = self.read_dex_data()
         cex_data = self.read_cex_data()
+        futures_data = self.read_futures_data()
         self.generate_dex_file(dex_data.symbols)
         self.generate_cex_file(cex_data.symbols)
+        self.generate_futures_file(futures_data.symbols)
     
     def add_dex_symbol(self, symbol_data: dict) -> DEXSymbol:
         """Add a new DEX symbol"""

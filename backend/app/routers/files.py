@@ -25,6 +25,13 @@ async def download_file(file_type: str):
                 filename="cex_symbols.txt",
                 media_type="text/plain"
             )
+    elif file_type == "futures_symbols":
+        if file_manager.futures_symbols_file.exists():
+            return FileResponse(
+                path=file_manager.futures_symbols_file,
+                filename="futures_symbols.txt",
+                media_type="text/plain"
+            )
     
     raise HTTPException(status_code=404, detail="File not found")
 
@@ -33,15 +40,19 @@ async def get_file_status():
     """Get file information and statistics"""
     dex_data = file_manager.read_dex_data()
     cex_data = file_manager.read_cex_data()
+    futures_data = file_manager.read_futures_data()
     
     return FileStatus(
         dex_symbols_count=len(dex_data.symbols),
         cex_symbols_count=len(cex_data.symbols),
+        futures_symbols_count=len(futures_data.symbols),
         dex_file_size=file_manager.get_file_size(file_manager.pooladdress_file),
         cex_file_size=file_manager.get_file_size(file_manager.cex_symbols_file),
-        last_updated=max(dex_data.last_updated, cex_data.last_updated),
+        futures_file_size=file_manager.get_file_size(file_manager.futures_symbols_file),
+        last_updated=max(dex_data.last_updated, cex_data.last_updated, futures_data.last_updated),
         pooladdress_file_exists=file_manager.pooladdress_file.exists(),
-        cex_symbols_file_exists=file_manager.cex_symbols_file.exists()
+        cex_symbols_file_exists=file_manager.cex_symbols_file.exists(),
+        futures_symbols_file_exists=file_manager.futures_symbols_file.exists()
     )
 
 @router.get("/content/{file_type}")
@@ -55,6 +66,10 @@ async def get_file_content(file_type: str):
         if file_manager.cex_symbols_file.exists():
             with open(file_manager.cex_symbols_file, 'r') as f:
                 return {"content": f.read()}
+    elif file_type == "futures_symbols":
+        if file_manager.futures_symbols_file.exists():
+            with open(file_manager.futures_symbols_file, 'r') as f:
+                return {"content": f.read()}
     
     raise HTTPException(status_code=404, detail="File not found")
 
@@ -62,8 +77,9 @@ async def get_file_content(file_type: str):
 async def create_backup():
     """Create backup of current data"""
     try:
-        file_manager.create_backup(file_manager.dex_file)
-        file_manager.create_backup(file_manager.cex_file)
+        file_manager.create_backup('dex')
+        file_manager.create_backup('cex')
+        file_manager.create_backup('futures')
         return {"message": "Backup created successfully", "timestamp": datetime.now().isoformat()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create backup: {str(e)}")

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import dex, cex, files
+from app.routers import dex, cex, futures, files
 
 app = FastAPI(
     title="Crypto Symbols Manager API",
@@ -21,6 +21,7 @@ app.add_middleware(
 # Include routers
 app.include_router(dex.router)
 app.include_router(cex.router)
+app.include_router(futures.router)
 app.include_router(files.router)
 
 @app.get("/")

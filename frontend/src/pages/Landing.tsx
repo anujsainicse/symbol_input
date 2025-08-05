@@ -42,7 +42,7 @@ const Landing: React.FC = () => {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
           <Link
             to="/dex"
             className="card-glass group text-center cursor-pointer"
@@ -80,6 +80,25 @@ const Landing: React.FC = () => {
               <span className="text-sm font-medium">Manage Exchange Symbols</span>
             </div>
           </Link>
+
+          <Link
+            to="/futures"
+            className="card-glass group text-center cursor-pointer"
+          >
+            <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <TrendingUp className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Futures Symbols
+            </h2>
+            <p className="text-gray-300 mb-6 leading-relaxed">
+              Configure futures trading symbols across major derivatives exchanges like Binance, Bybit, OKX and more
+            </p>
+            <div className="flex items-center justify-center space-x-2 text-purple-400">
+              <Activity className="w-4 h-4" />
+              <span className="text-sm font-medium">Manage Futures Symbols</span>
+            </div>
+          </Link>
         </div>
 
         {/* Status Dashboard */}
@@ -95,7 +114,7 @@ const Landing: React.FC = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-700/20 border border-blue-500/30 rounded-xl p-6 text-center">
                 <div className="text-4xl font-bold text-blue-400 mb-2">
                   {fileStatus.dex_symbols_count}
@@ -114,18 +133,36 @@ const Landing: React.FC = () => {
               
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-700/20 border border-purple-500/30 rounded-xl p-6 text-center">
                 <div className="text-4xl font-bold text-purple-400 mb-2">
+                  {fileStatus.futures_symbols_count || 0}
+                </div>
+                <div className="text-gray-300 font-medium">Futures Symbols</div>
+                <div className="text-xs text-purple-300 mt-1">Derivatives Trading</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-gradient-to-br from-indigo-600/20 to-indigo-700/20 border border-indigo-500/30 rounded-xl p-6 text-center">
+                <div className="text-3xl font-bold text-indigo-400 mb-2">
                   {formatFileSize(fileStatus.dex_file_size)}
                 </div>
-                <div className="text-gray-300 font-medium">DEX File Size</div>
-                <div className="text-xs text-purple-300 mt-1">Pool Address Data</div>
+                <div className="text-gray-300 font-medium">DEX File</div>
+                <div className="text-xs text-indigo-300 mt-1">pooladdress.txt</div>
               </div>
               
               <div className="bg-gradient-to-br from-orange-600/20 to-orange-700/20 border border-orange-500/30 rounded-xl p-6 text-center">
-                <div className="text-4xl font-bold text-orange-400 mb-2">
+                <div className="text-3xl font-bold text-orange-400 mb-2">
                   {formatFileSize(fileStatus.cex_file_size)}
                 </div>
-                <div className="text-gray-300 font-medium">CEX File Size</div>
-                <div className="text-xs text-orange-300 mt-1">Symbol Data</div>
+                <div className="text-gray-300 font-medium">CEX File</div>
+                <div className="text-xs text-orange-300 mt-1">cex_symbols.txt</div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-pink-600/20 to-pink-700/20 border border-pink-500/30 rounded-xl p-6 text-center">
+                <div className="text-3xl font-bold text-pink-400 mb-2">
+                  {formatFileSize(fileStatus.futures_file_size || 0)}
+                </div>
+                <div className="text-gray-300 font-medium">Futures File</div>
+                <div className="text-xs text-pink-300 mt-1">futures_symbols.txt</div>
               </div>
             </div>
 
@@ -157,6 +194,17 @@ const Landing: React.FC = () => {
                   >
                     <Download className="w-5 h-5 mr-2" />
                     Download cex_symbols.txt
+                  </a>
+                )}
+                
+                {fileStatus.futures_symbols_file_exists && (
+                  <a
+                    href={filesApi.downloadFile('futures_symbols')}
+                    className="btn-purple inline-flex items-center justify-center"
+                    download
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download futures_symbols.txt
                   </a>
                 )}
               </div>
