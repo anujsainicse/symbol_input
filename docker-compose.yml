@@ -6,7 +6,7 @@ services:
     container_name: crypto-symbols-backend
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8003:8000"
     volumes:
       # Persist data directory
       - backend_data:/app/data
@@ -26,12 +26,12 @@ services:
     container_name: crypto-symbols-frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3003:3000"
     depends_on:
       - backend
-    # API URL will use default from code (http://localhost:8000)
-    # environment:
-    #   - REACT_APP_API_URL=http://localhost:8000
+    # API URL will use default from code (http://localhost:8002)
+    environment:
+      - REACT_APP_API_URL=http://localhost:8003
     networks:
       - crypto-network
     # Health check removed for simplicity

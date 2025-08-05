@@ -2,12 +2,12 @@
 
 # Start backend
 echo "Starting backend..."
-(cd backend && uvicorn app.main:app --reload --port 8001) &
+(cd backend && uvicorn app.main:app --reload --port 8003) &
 BACKEND_PID=$!
 
 # Start frontend
 echo "Starting frontend..."
-(cd frontend && PORT=3001 npm start) &
+(cd frontend && PORT=3003 npm start) &
 FRONTEND_PID=$!
 
 # Function to cleanup processes
@@ -21,8 +21,8 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 echo "Both servers are running. Press Ctrl+C to stop both."
-echo "Backend: http://localhost:8001"
-echo "Frontend: http://localhost:3001"
+echo "Backend: http://localhost:8003"
+echo "Frontend: http://localhost:3003"
 
 # Wait for processes
 wait
